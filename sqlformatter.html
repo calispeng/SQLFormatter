@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <title>SQL Formatter</title>
+</head>
+<body class="dark-mode">
+
+  <h2>SQL Formatter</h2>
+  
+  <button id="toggleTheme" class="theme-toggle">🌙</button>
+
+  <textarea id="inputSql" class="dark-mode" placeholder="Paste your SQL here..."></textarea>
+  <br />
+  <button id="formatBtn">Format & Highlight SQL</button>
+
+  <div id="outputSql" class="dark-mode"></div>
+  <button onclick="CopyToClipboard()">Copy</button>
+
+  <script src="mode.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
