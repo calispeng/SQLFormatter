@@ -70,10 +70,45 @@ document.addEventListener('DOMContentLoaded', () => {
   function copyToClipboard() {
     const copyElem = document.getElementById('outputSql');
     const textToCopy = copyElem.innerText || copyElem.textContent;
-  
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      alert('Formatted SQL copied to clipboard!');
-    }).catch(err => {
-      alert('Failed to copy text: ', err);
-    });
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => showToast('Formatted SQL copied!'))
+      .catch(() => fallbackCopy(textToCopy));
+  } else {
+    fallbackCopy(textToCopy);
   }
+}
+
+function fallbackCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    const success = document.execCommand('copy');
+    showToast(success ? 'Formatted SQL copied!' : 'Failed to copy text');
+  } catch {
+    showToast('Failed to copy text');
+  }
+
+  document.body.removeChild(textarea);
+}
+
+function showToast(message) {
+  let toast = document.createElement('div');
+  toast.className = 'toast-message';
+  toast.textContent = message;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => toast.classList.add('show'), 100);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
